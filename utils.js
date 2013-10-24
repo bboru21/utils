@@ -4,7 +4,9 @@ Utils.httpGet = function(url, callback) {
 	var callback = callback || function() {};
 
 	var oReq = new XMLHttpRequest();
-	oReq.onload = callback;
+	oReq.onload = function() {
+		callback( oReq.responseText );
+	};
 	oReq.open("get", url, true);
 	oReq.send();
 	return;
@@ -70,3 +72,25 @@ Utils.parseUri = function(key) {
 	}
 	return val;
 };
+
+Utils.forEach = function(list, callback) {
+	for(var i = 0, len = list.length; i < len; i++) {
+		callback.call(list[i], i);
+	}
+};
+
+Utils.assert = function(value, desc) {
+	var li = document.createElement("li");
+	li.style.color = value ? "green" : "red";
+	li.style.textDecoration = value ? "none" : "line-through";
+	li.appendChild(document.createTextNode(desc));
+
+	var results = document.getElementById("results");
+	if (!results) {
+		results = document.createElement("ul");
+		results.setAttribute("id", "results");
+		document.getElementsByTagName("body")[0].appendChild(results); 
+	}
+	
+	results.appendChild(li);
+}
